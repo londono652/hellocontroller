@@ -34,10 +34,10 @@ steps:
   inputs:
     command: 'build'
     Dockerfile: '**/Dockerfile'
-    tags: '$(Build.BuildId)'
+    tags: 'HelloController'
 - task: Docker@2
   inputs:
     containerRegistry: 'SC_ArtifactoryRegistry'
     repository: 'hellocontroller'
     command: 'push'
-    tags: '$(Build.BuildId)'
+    tags: 'HelloController'
