@@ -35,7 +35,7 @@ steps:
     containerregistrytype: 'Container Registry'
     command: 'Build an image'
     dockerFile: '**/Dockerfile'
-    imageName: '$(Build.BuildId)'
+    imageName: 'londono652.jfrog.io/hellocontroller/$(Build.BuildId)'
     useDefaultContext: false
     buildContext: '.'
     enforceDockerNamingConvention: false
@@ -44,5 +44,5 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
     command: 'Push an image'
-    imageName: '$(Build.Repository.Name)/$(Build.BuildId)'
+    imageName: '/$(Build.BuildId)'
     enforceDockerNamingConvention: false
