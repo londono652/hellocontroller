@@ -30,14 +30,20 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-- task: Docker@2
+- task: Docker@1
   inputs:
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    tags: 'HelloController'
-- task: Docker@2
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+    command: 'Build an image'
+    dockerFile: '**/Dockerfile'
+    imageName: '$(ImageName)'
+    includeLatestTag: true
+    useDefaultContext: false
+    buildContext: '.'
+
+- task: Docker@1
   inputs:
-    containerRegistry: 'SC_ArtifactoryRegistry'
-    repository: 'hellocontroller'
-    command: 'push'
-    tags: 'HelloController'
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+    command: 'Push an image'
+    imageName: '$(ImageName)'
