@@ -9,7 +9,10 @@ steps:
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    testRunTitle: 'Pruebas Unitarias'
     codeCoverageToolOption: 'Cobertura'
+    codeCoverageFailIfEmpty: true
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     mavenVersionOption: 'Default'
@@ -17,9 +20,6 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
-    jdkArchitectureOption: 'x64'
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
 - task: CopyFiles@2
   inputs:
    SourceFolder: '$(system.defaultworkingdirectory)'
