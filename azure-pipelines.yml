@@ -44,5 +44,5 @@ steps:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
     command: 'Push an image'
-    imageName: '/$(Build.BuildId)'
+    imageName: 'hellocontroller/$(Build.BuildId)'
     enforceDockerNamingConvention: false
