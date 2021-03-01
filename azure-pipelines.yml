@@ -33,17 +33,15 @@ steps:
 - task: Docker@1
   inputs:
     containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
     command: 'Build an image'
     dockerFile: '**/Dockerfile'
-    imageName: '$(ImageName)'
+    imageName: 'helloimage'
     useDefaultContext: false
     buildContext: '.'
     enforceDockerNamingConvention: false
-
 - task: Docker@1
   inputs:
     containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
     command: 'Push an image'
-    imageName: '$(ImageName)'
+    imageName: 'helloimage'
