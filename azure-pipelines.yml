@@ -40,4 +40,4 @@ steps:
     containerRegistry: 'SC_ArtifactoryRegistry'
     repository: 'hellocontroller'
     command: 'push'
-    tags: 'londono652.jfrog.io/hellocontroller/$(Build.BuildId)'
+    tags: '$(Build.BuildId)'
