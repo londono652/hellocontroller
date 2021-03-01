@@ -39,6 +39,7 @@ steps:
     imageName: '$(ImageName)'
     useDefaultContext: false
     buildContext: '.'
+    enforceDockerNamingConvention: false
 
 - task: Docker@1
   inputs:
