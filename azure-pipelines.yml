@@ -37,7 +37,6 @@ steps:
     command: 'Build an image'
     dockerFile: '**/Dockerfile'
     imageName: '$(ImageName)'
-    includeLatestTag: true
     useDefaultContext: false
     buildContext: '.'
 
