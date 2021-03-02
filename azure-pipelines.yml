@@ -21,6 +21,13 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
+- task: ArtifactoryMaven@2
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'install'
+    artifactoryDeployService: 'Artifactory'
+    targetDeployReleaseRepo: 'hellocontrollerjars'
+    targetDeploySnapshotRepo: 'hellocontrollerjars'
 - task: CopyFiles@2
   displayName: 'Copia de Artefacto'
   inputs:
