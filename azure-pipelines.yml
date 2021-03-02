@@ -34,7 +34,7 @@ steps:
     script: |
       echo 'Subiendo Build to Artefactory'
       cd /home/vsts/work/1/a/target/
-      curl -X PUT -u londono652@gmail.com:Camilols1989* -T HelloController-0.0.1-SNAPSHOT.jar "https://londono652.jfrog.io/artifactory/hellocontrollerjars/com/jlondono/HelloController/0.0.1-SNAPSHOT/HelloController-0.0.1-SNAPSHOT.jar"
+      curl -X PUT -u $(ARTIFACTORY-USER):$(ARTIFACTORY-PASS) -T HelloController-0.0.1-SNAPSHOT.jar "https://londono652.jfrog.io/artifactory/hellocontrollerjars/com/jlondono/HelloController/0.0.1-SNAPSHOT/HelloController-0.0.1-SNAPSHOT.jar"
 - task: PublishBuildArtifacts@1
   displayName: 'Publicar Artefacto en Azure'
   inputs:
