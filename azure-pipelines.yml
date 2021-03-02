@@ -25,6 +25,7 @@ jobs:
       sonarQubeRunAnalysis: false
     
 - job: Publish
+  dependsOn: Build
   steps:
     -  task: CopyFiles@2
        displayName: 'Copia de Artefacto'
