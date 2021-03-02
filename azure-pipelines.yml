@@ -4,58 +4,63 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: Maven@3
-  displayName: 'Maven Build-Pruebas Unitarias-Cobertura'
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    testRunTitle: 'Pruebas Unitarias'
-    codeCoverageToolOption: 'JaCoCo'
-    codeCoverageFailIfEmpty: true
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    mavenVersionOption: 'Default'
-    mavenOptions: '-Xmx3072m'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
-- task: CopyFiles@2
-  displayName: 'Copia de Artefacto'
-  inputs:
-   SourceFolder: '$(system.defaultworkingdirectory)'
-   Contents: '**/*.jar'
-   TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: Bash@3
-  displayName: 'Subir Artefacto a Repositorio Artefactory'
-  inputs:
-    targetType: 'inline'
-    script: |
-      echo 'Subiendo Build to Artefactory'
-      cd /home/vsts/work/1/a/target/
-      curl -X PUT -u $(ARTIFACTORY-USER):$(ARTIFACTORY-PASS) -T HelloController-0.0.1-SNAPSHOT.jar "https://londono652.jfrog.io/artifactory/hellocontrollerjars/com/jlondono/HelloController/0.0.1-SNAPSHOT/HelloController-0.0.1-SNAPSHOT.jar"
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicar Artefacto en Azure'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-- task: Docker@1
-  displayName: 'Build imagen docker'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    command: 'Build an image'
-    dockerFile: '**/Dockerfile'
-    imageName: 'londono652.jfrog.io/hellocontroller/$(Build.BuildId)'
-    useDefaultContext: false
-    buildContext: '.'
-    enforceDockerNamingConvention: false
-- task: Docker@1
-  displayName: 'Subir imagen docker-Artefactory'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
-    command: 'Push an image'
-    imageName: 'hellocontroller/$(Build.BuildId)'
-    enforceDockerNamingConvention: false
+jobs:
+-  job: Build
+   steps:
+   - task: Maven@3
+     displayName: 'Maven Build-Pruebas Unitarias-Cobertura'
+     inputs:
+      mavenPomFile: 'pom.xml'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      testRunTitle: 'Pruebas Unitarias'
+      codeCoverageToolOption: 'JaCoCo'
+      codeCoverageFailIfEmpty: true
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      mavenVersionOption: 'Default'
+      mavenOptions: '-Xmx3072m'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+    
+- job: Publish
+  steps:
+    -  task: CopyFiles@2
+       displayName: 'Copia de Artefacto'
+       inputs:
+        SourceFolder: '$(system.defaultworkingdirectory)'
+        Contents: '**/*.jar'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: Bash@3
+      displayName:  'Subir Artefacto a Repositorio Artefactory'
+      inputs:
+       targetType: 'inline'
+       script: |
+        echo 'Subiendo Build to Artefactory'
+        cd /home/vsts/work/1/a/target/
+        curl -X PUT -u $(ARTIFACTORY-USER):$(ARTIFACTORY-PASS) -T HelloController-0.0.1-SNAPSHOT.jar "https://londono652.jfrog.io/artifactory/hellocontrollerjars/com/jlondono/HelloController/0.0.1-SNAPSHOT/HelloController-0.0.1-SNAPSHOT.jar"
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publicar Artefacto en Azure'
+      inputs:
+       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       ArtifactName: 'drop'
+       publishLocation: 'Container'
+    - task: Docker@1
+      displayName: 'Build imagen docker'
+      inputs:
+       containerregistrytype: 'Container Registry'
+       command: 'Build an image'
+       dockerFile: '**/Dockerfile'
+       imageName: 'londono652.jfrog.io/hellocontroller/$(Build.BuildId)'
+       useDefaultContext: false
+       buildContext: '.'
+       enforceDockerNamingConvention: false
+    - task: Docker@1
+      displayName: 'Subir imagen docker-Artefactory'
+      inputs:
+       containerregistrytype: 'Container Registry'
+       dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+       command: 'Push an image'
+       imageName: 'hellocontroller/$(Build.BuildId)'
+       enforceDockerNamingConvention: false
