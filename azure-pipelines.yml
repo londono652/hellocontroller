@@ -6,7 +6,7 @@ pool:
 
 steps:
 - task: Maven@3
-  displayName: 'Maven Build-Pruebas Unitarias-Cobertura'
+  displayName: 'Build-Pruebas Unitarias-Cobertura'
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
@@ -22,25 +22,22 @@ steps:
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
 - task: ArtifactoryMaven@2
+  displayName: 'Subir build Artefactory'
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'install'
     artifactoryDeployService: 'Artifactory'
     targetDeployReleaseRepo: 'hellocontrollerjars'
     targetDeploySnapshotRepo: 'hellocontrollerjars'
-- task: CopyFiles@2
-  displayName: 'Copia de Artefacto'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+  
+- task: ArtifactoryPublishBuildInfo@1
   inputs:
-   SourceFolder: '$(system.defaultworkingdirectory)'
-   Contents: '**/*.jar'
-   TargetFolder: '$(Build.ArtifactStagingDirectory)'
-   
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicar Artefacto en Azure'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    artifactoryService: 'Artifactory'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
 - task: Docker@1
   displayName: 'Build imagen docker'
   inputs:
