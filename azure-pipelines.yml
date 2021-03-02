@@ -6,7 +6,7 @@ pool:
 
 steps:
 - task: Maven@3
-  displayName: 'Build-Pruebas Unitarias-Cobertura'
+  displayName: 'Build,Pruebas Unitarias,Cobertura'
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
@@ -34,6 +34,7 @@ steps:
     buildNumber: '$(Build.BuildNumber)'
   
 - task: ArtifactoryPublishBuildInfo@1
+  displayName: 'Publicar Info Build Artifactory'
   inputs:
     artifactoryService: 'Artifactory'
     buildName: '$(Build.DefinitionName)'
