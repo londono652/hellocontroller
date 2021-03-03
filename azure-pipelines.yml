@@ -6,6 +6,7 @@ pool:
 
 steps:
 - task: Maven@3
+  displayName: 'Build,Pruebas Unitarias,Cobertura'
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
@@ -20,17 +21,50 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sonarQubeRunAnalysis: false
-- task: CopyFiles@2
+- task: ArtifactoryMaven@2
+  displayName: 'Subir build Artefactory'
   inputs:
-   SourceFolder: '$(system.defaultworkingdirectory)'
-   Contents: '**/*.jar'
-   TargetFolder: '$(Build.ArtifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
+    mavenPomFile: 'pom.xml'
+    goals: 'install'
+    artifactoryDeployService: 'Artifactory'
+    targetDeployReleaseRepo: 'hellocontrollerjars'
+    targetDeploySnapshotRepo: 'hellocontrollerjars'
+    collectBuildInfo: true
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+  
+- task: ArtifactoryPublishBuildInfo@1
+  displayName: 'Publicar Info Build Artifactory'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-- task: Docker@2
+    artifactoryService: 'Artifactory'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+- task: Docker@1
+  displayName: 'Build imagen docker'
   inputs:
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
+    containerregistrytype: 'Container Registry'
+    command: 'Build an image'
+    dockerFile: '**/Dockerfile'
+    imageName: 'londono652.jfrog.io/hellocontroller/hello:$(Build.BuildNumber)'
+    includeLatestTag: true
+    useDefaultContext: false
+    buildContext: '.'
+    enforceDockerNamingConvention: false
+- task: Docker@1
+  displayName: 'Subir imagen docker-Artefactory'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+    command: 'Push an image'
+    imageName: 'hellocontroller/hello:$(Build.BuildNumber)'
+    includeSourceTags: true
+    enforceDockerNamingConvention: false
+- task: Docker@1
+  displayName: 'Subir imagen latest docker-Artefactory'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+    command: 'Push an image'
+    imageName: 'hellocontroller/hello:latest'
+    includeSourceTags: true
+    enforceDockerNamingConvention: false
