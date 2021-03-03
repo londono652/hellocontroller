@@ -59,3 +59,12 @@ steps:
     imageName: 'hellocontroller/hello:$(Build.BuildNumber)'
     includeSourceTags: true
     enforceDockerNamingConvention: false
+- task: Docker@1
+  displayName: 'Subir imagen latest docker-Artefactory'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+    command: 'Push an image'
+    imageName: 'hellocontroller/hello:latest'
+    includeSourceTags: true
+    enforceDockerNamingConvention: false
