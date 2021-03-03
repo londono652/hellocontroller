@@ -26,10 +26,7 @@ steps:
     SonarCloud: 'SonarCloud'
     organization: 'londono652'
     scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'londono652_hellocontroller'
-    cliProjectName: 'hellocontroller'
-    cliSources: 'src/main/java/'
+    configMode: 'file'
 - task: SonarCloudAnalyze@1
 - task: ArtifactoryMaven@2
   displayName: 'Subir build Artefactory'
