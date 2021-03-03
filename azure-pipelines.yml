@@ -29,7 +29,7 @@ steps:
     configMode: 'manual'
     cliProjectKey: 'londono652_hellocontroller'
     cliProjectName: 'hellocontroller'
-    cliSources: '.'
+    cliSources: 'src/main/java/'
 - task: SonarCloudAnalyze@1
 - task: ArtifactoryMaven@2
   displayName: 'Subir build Artefactory'
