@@ -32,7 +32,14 @@ steps:
     collectBuildInfo: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
-  
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'londono652'
+    scannerMode: 'MSBuild'
+    projectKey: 'londono652_hellocontroller'
+    projectName: 'hellocontroller'
+- task: SonarCloudAnalyze@1
 - task: ArtifactoryPublishBuildInfo@1
   displayName: 'Publicar Info Build Artifactory'
   inputs:
