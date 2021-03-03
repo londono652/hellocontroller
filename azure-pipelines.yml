@@ -45,6 +45,7 @@ steps:
     containerregistrytype: 'Container Registry'
     command: 'Build an image'
     dockerFile: '**/Dockerfile'
+    arguments: '--tag $(Build.BuildNumber)'
     imageName: 'londono652.jfrog.io/hellocontroller/hello'
     useDefaultContext: false
     buildContext: '.'
@@ -56,4 +57,5 @@ steps:
     dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
     command: 'Push an image'
     imageName: 'hellocontroller/hello'
+    includeSourceTags: true
     enforceDockerNamingConvention: false
