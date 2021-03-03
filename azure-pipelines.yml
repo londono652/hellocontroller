@@ -46,6 +46,7 @@ steps:
     command: 'Build an image'
     dockerFile: '**/Dockerfile'
     imageName: 'londono652.jfrog.io/hellocontroller/hello:$(Build.BuildNumber)'
+    includeLatestTag: true
     useDefaultContext: false
     buildContext: '.'
     enforceDockerNamingConvention: false
