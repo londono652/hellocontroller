@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.jlondono</groupId>
 	<artifactId>HelloController</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>HelloController</name>
 	<description>Demo project Hello</description>
 	<properties>
@@ -28,7 +28,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -37,5 +36,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
