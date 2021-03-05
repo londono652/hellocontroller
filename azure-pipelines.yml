@@ -33,6 +33,10 @@ stages:
               sonarQubeRunAnalysis: true
               isJacocoCoverageReportXML: true
               sqMavenPluginVersionChoice: 'latest'
+          - task: sonarcloud-buildbreaker@2
+            inputs:
+              SonarCloud: 'SonarCloud'
+              organization: 'londono652'
       - job: Publicacion_de_artefactos_e_imagenes
         dependsOn: Construccion_y_Analisis_artefacto
         steps:
