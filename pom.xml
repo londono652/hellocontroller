@@ -14,7 +14,8 @@
 	<name>HelloController</name>
 	<description>Demo project Hello</description>
 	<properties>
-		<java.version>8</java.version>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
 		<jacoco.version>0.8.3</jacoco.version>
 		<sonar.projectKey>londono652_hellocontroller</sonar.projectKey>
 		<sonar.organization>londono652</sonar.organization>
@@ -72,6 +73,11 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
 			</plugin>
 		</plugins>
 	</build>
