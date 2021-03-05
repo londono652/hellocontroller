@@ -6,12 +6,6 @@ pool:
 
 steps:
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'londono652'
-    scannerMode: 'CLI'
-    configMode: 'file'
 - task: Maven@3
   displayName: 'Build,Pruebas Unitarias,Cobertura'
   inputs:
@@ -27,9 +21,14 @@ steps:
     mavenOptions: '-Xmx3072m'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: true
-    isJacocoCoverageReportXML: true
-    sqMavenPluginVersionChoice: 'latest'
+    sonarQubeRunAnalysis: false
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'londono652'
+    scannerMode: 'CLI'
+    configMode: 'file'
+- task: SonarCloudAnalyze@1
 - task: ArtifactoryMaven@2
   displayName: 'Subir build Artefactory'
   inputs:
