@@ -34,6 +34,7 @@ stages:
               isJacocoCoverageReportXML: true
               sqMavenPluginVersionChoice: 'latest'
       - job: Publicacion_de_artefactos_e_imagenes
+        dependsOn: Construccion_y_Analisis_artefacto
         steps:
           - task: ArtifactoryMaven@2
             displayName: 'Subir build Artefactory'
