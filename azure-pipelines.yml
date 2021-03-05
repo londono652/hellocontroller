@@ -3,74 +3,79 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-
-steps:
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'londono652'
-    scannerMode: 'CLI'
-    configMode: 'file'
-- task: Maven@3
-  displayName: 'Build,Pruebas Unitarias,Cobertura'
-  inputs:
-    mavenPomFile: 'pom.xml'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    testRunTitle: 'Pruebas Unitarias'
-    codeCoverageToolOption: 'JaCoCo'
-    codeCoverageFailIfEmpty: true
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenOptions: '-Xmx3072m'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: true
-    isJacocoCoverageReportXML: true
-    sqMavenPluginVersionChoice: 'latest'
-- task: ArtifactoryMaven@2
-  displayName: 'Subir build Artefactory'
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'install'
-    artifactoryDeployService: 'Artifactory'
-    targetDeployReleaseRepo: 'hellocontrollerjars'
-    targetDeploySnapshotRepo: 'hellocontrollerjars'
-    collectBuildInfo: true
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-- task: ArtifactoryPublishBuildInfo@1
-  displayName: 'Publicar Info Build Artifactory'
-  inputs:
-    artifactoryService: 'Artifactory'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-- task: Docker@1
-  displayName: 'Build imagen docker'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    command: 'Build an image'
-    dockerFile: '**/Dockerfile'
-    imageName: 'londono652.jfrog.io/hellocontroller/hello:$(Build.BuildNumber)'
-    includeLatestTag: true
-    useDefaultContext: false
-    buildContext: '.'
-    enforceDockerNamingConvention: false
-- task: Docker@1
-  displayName: 'Subir imagen docker-Artefactory'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
-    command: 'Push an image'
-    imageName: 'hellocontroller/hello:$(Build.BuildNumber)'
-    includeSourceTags: true
-    enforceDockerNamingConvention: false
-- task: Docker@1
-  displayName: 'Subir imagen latest docker-Artefactory'
-  inputs:
-    containerregistrytype: 'Container Registry'
-    dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
-    command: 'Push an image'
-    imageName: 'hellocontroller/hello:latest'
-    includeSourceTags: true
-    enforceDockerNamingConvention: false
+  
+stages: 
+  - stage: CI
+    jobs:
+      - job: Construccion_Analisis_Artefacto
+        steps:
+          - task: SonarCloudPrepare@1
+            displayName: Preparar datos Sonar
+            inputs:
+              SonarCloud: 'SonarCloud'
+              organization: 'londono652'
+              scannerMode: 'CLI'
+              configMode: 'file'
+          - task: Maven@3
+            displayName: 'Build,Unitarias,Cobertura,Sonar'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              testRunTitle: 'Pruebas Unitarias'
+              codeCoverageToolOption: 'JaCoCo'
+              codeCoverageFailIfEmpty: true
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenOptions: '-Xmx3072m'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: true
+              isJacocoCoverageReportXML: true
+              sqMavenPluginVersionChoice: 'latest'
+          - task: ArtifactoryMaven@2
+            displayName: 'Subir build Artefactory'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'install'
+              artifactoryDeployService: 'Artifactory'
+              targetDeployReleaseRepo: 'hellocontrollerjars'
+              targetDeploySnapshotRepo: 'hellocontrollerjars'
+              collectBuildInfo: true
+              buildName: '$(Build.DefinitionName)'
+              buildNumber: '$(Build.BuildNumber)'
+          - task: ArtifactoryPublishBuildInfo@1
+            displayName: 'Publicar Info Build Artifactory'
+            inputs:
+              artifactoryService: 'Artifactory'
+              buildName: '$(Build.DefinitionName)'
+              buildNumber: '$(Build.BuildNumber)'
+          - task: Docker@1
+            displayName: 'Build imagen docker'
+            inputs:
+              containerregistrytype: 'Container Registry'
+              command: 'Build an image'
+              dockerFile: '**/Dockerfile'
+              imageName: 'londono652.jfrog.io/hellocontroller/hello:$(Build.BuildNumber)'
+              includeLatestTag: true
+              useDefaultContext: false
+              buildContext: '.'
+              enforceDockerNamingConvention: false
+          - task: Docker@1
+            displayName: 'Subir imagen docker-Artefactory'
+            inputs:
+              containerregistrytype: 'Container Registry'
+              dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+              command: 'Push an image'
+              imageName: 'hellocontroller/hello:$(Build.BuildNumber)'
+              includeSourceTags: true
+              enforceDockerNamingConvention: false
+          - task: Docker@1
+            displayName: 'Subir imagen latest docker-Artefactory'
+            inputs:
+              containerregistrytype: 'Container Registry'
+              dockerRegistryEndpoint: 'SC_ArtifactoryRegistry'
+              command: 'Push an image'
+              imageName: 'hellocontroller/hello:latest'
+              includeSourceTags: true
+              enforceDockerNamingConvention: false
