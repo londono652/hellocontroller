@@ -5,7 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 stages: 
-  - stage: Integracion Continua
+  - stage: Integracion_Continua
     jobs:
       - job: Construccion_y_Analisis_artefacto
         steps:
