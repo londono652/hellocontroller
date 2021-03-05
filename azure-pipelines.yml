@@ -3,11 +3,11 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-  
+
 stages: 
-  - stage: CI
+  - stage: Integracion Continua
     jobs:
-      - job: Construccion_Analisis_Artefacto
+      - job: Construccion_y_Analisis_artefacto
         steps:
           - task: SonarCloudPrepare@1
             displayName: Preparar datos Sonar
@@ -33,6 +33,8 @@ stages:
               sonarQubeRunAnalysis: true
               isJacocoCoverageReportXML: true
               sqMavenPluginVersionChoice: 'latest'
+      - job: Publicacion_de_artefactos_e_imagenes
+        steps:
           - task: ArtifactoryMaven@2
             displayName: 'Subir build Artefactory'
             inputs:
